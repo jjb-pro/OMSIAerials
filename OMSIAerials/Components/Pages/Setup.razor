@@ -1,0 +1,108 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using OMSIAerials.Model
+
+@page "/Setup"
+
+@rendermode InteractiveServer
+
+@inject IDialogService DialogService
+
+<PageTitle>Setup</PageTitle>
+
+<div class="centered-container">
+    <EditForm Model="@_model">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <FluentWizard StepperPosition="StepperPosition.Top"
+                      StepSequence="@WizardStepSequence.Linear"
+                      DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
+                      Border="WizardBorder.Outside"
+                      StepTitleHiddenWhen="@GridItemHidden.XsAndDown"
+                      Height="80%"
+                      Width="80%"
+                      OnFinish="@OnFinishedAsync">
+            <Steps>
+                <FluentWizardStep Label="Introduction"
+                                  Summary="Quick Setup"
+                                  OnChange="@OnStepChange">
+                    <p>This wizard will guide you through creating a custom link for OMSI 2 aerials. By the end, you'll have a link ready for your options.cfg file. Let's begin!</p>
+                </FluentWizardStep>
+
+                <FluentWizardStep Label="Imagery Source"
+                                  Summary="Choose an Imagery Source"
+                                  OnChange="@OnStepChange">
+                    <FluentStack Orientation="Orientation.Vertical">
+                        <FluentCombobox style="width: 100%;" Items="@(Enum.GetValues<Provider>().Cast<Provider>().ToList())" />
+                        <p>Select an imagery source to display aerial maps in OMSI 2 Editor.</p>
+                    </FluentStack>
+                </FluentWizardStep>
+
+                <FluentWizardStep Label="API Key"
+                                  Summary="Enter Your API Key"
+                                  OnChange="@OnStepChange">
+                    <p>Provide the API key from your imagery provider to access the aerial imagery.</p>
+                    <FluentTextField style="width: 100%;" 
+                                     @bind-Value="_model.ApiKey" 
+                                     Placeholder="Enter your API key" 
+                                     Required />
+                </FluentWizardStep>
+
+                <FluentWizardStep Label="Finish"
+                                  Summary="Copy the Generated Link">
+                    <p>Your custom link is ready. Copy the link below and paste it into your options.cfg file.</p>
+                    <FluentStack Orientation="@Orientation.Horizontal">
+                        <FluentTextField style="width: 100%;" 
+                                         Value="@($"http://localhost:7005/aerial/bing?x=~x&y=~y&z=~z&type=Aerial&apiCode={_model.ApiKey}")" 
+                                         InputMode="@InputMode.None" />
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.Copy())"
+                                      Appearance="Appearance.Accent">
+                            Copy
+                        </FluentButton>
+                    </FluentStack>
+                </FluentWizardStep>
+            </Steps>
+        </FluentWizard>
+    </EditForm>
+</div>
+
+@code {
+    private SetupModel _model = new SetupModel();
+
+    void OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        // Add logic for handling step changes if needed
+    }
+
+    async Task OnFinishedAsync()
+    {
+        // Check if required fields are valid before finishing the wizard
+        if (_model.Source == null || string.IsNullOrWhiteSpace(_model.ApiKey))
+        {
+            await DialogService.ShowInfoAsync("Please complete all required fields.");
+        }
+        else
+        {
+            await DialogService.ShowInfoAsync("Wizard completed successfully!");
+        }
+    }
+
+    public class SetupModel
+    {
+        [Required(ErrorMessage = "Imagery source is required")]
+        public Provider? Source { get; set; }
+
+        [Required(ErrorMessage = "API Key is required")]
+        public string? ApiKey { get; set; }
+    }
+}
+
+<style>
+    .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+    }
+</style>
