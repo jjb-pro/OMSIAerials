@@ -2,7 +2,8 @@
 
 **OMSI Aerials** is a lightweight local tile server that provides aerial and map overlays for OMSI 2. Designed for easy setup and customization, it allows you to use modern map providers like Bing, Google, Mapbox, and OpenStreetMap right inside the OMSI editor.
 
-> ⚠️ **Beta Notice:** OMSI Aerials is currently in early development. Bing support is stable; more features and providers will be added soon.
+> [!WARNING]  
+> **Beta Notice:** OMSI Aerials is currently in early development. Bing support is stable; more features and providers will be added soon.
 
 ## Features
 
