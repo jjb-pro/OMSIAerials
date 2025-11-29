@@ -1,5 +1,4 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@using OMSIAerials.Model
 
 @page "/Setup"
 
@@ -33,7 +32,7 @@
                                   Summary="Choose an Imagery Source"
                                   OnChange="@OnStepChange">
                     <FluentStack Orientation="Orientation.Vertical">
-                        <FluentCombobox style="width: 100%;" Items="@(Enum.GetValues<Provider>().Cast<Provider>().ToList())" />
+                        <FluentCombobox style="width: 100%;" Items="@(["Bing"])" />
                         <p>Select an imagery source to display aerial maps in OMSI 2 Editor.</p>
                     </FluentStack>
                 </FluentWizardStep>
@@ -90,7 +89,7 @@
     public class SetupModel
     {
         [Required(ErrorMessage = "Imagery source is required")]
-        public Provider? Source { get; set; }
+        public string? Source { get; set; }
 
         [Required(ErrorMessage = "API Key is required")]
         public string? ApiKey { get; set; }

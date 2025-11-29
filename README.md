@@ -37,7 +37,7 @@ A black console window will appear — this means the server is running.
 Add the following line to your `options.cfg` file in the OMSI Directory:
 
     ```
-    http://localhost:7005/aerial/{yourProvider}?x=~x&y=~y&z=~z&type=Aerial&apiCode={yourApiKey}
+    http://localhost:7005/aerial?provider={yourProvider}&x=~x&y=~y&z=~z&tileset=Aerial&apiCode={yourApiKey}
     ```
 
 > 🔑 Replace `{yourProvider}` and `{yourApiKey}` with the actual values.
